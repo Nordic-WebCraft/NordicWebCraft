@@ -156,6 +156,15 @@
         </div>
     </footer>
 
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <div class="toast-message"></div>
+        </div>
+        <div class="toast-progress"></div>
+    </div>
+
     <!-- Base libraries -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
@@ -213,14 +222,14 @@
                 const data = await response.json();
                 
                 if (data.success) {
-                    alert('Thank you for your message! We will get back to you soon.');
+                    showToast('Thank you for your message! We will get back to you soon.', 'success');
                     form.reset();
                 } else {
-                    alert('Something went wrong. Please try again.');
+                    showToast('Something went wrong. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('Something went wrong. Please try again.');
+                showToast('Something went wrong. Please try again.', 'error');
             } finally {
                 submitButton.disabled = false;
             }
@@ -245,6 +254,31 @@
                 navbar.classList.remove('scrolled');
             }
         });
+
+        // Toast Function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = toast.querySelector('.toast-message');
+            const icon = toast.querySelector('i');
+            
+            toastMessage.textContent = message;
+            
+            if (type === 'error') {
+                icon.classList.remove('fa-check-circle');
+                icon.classList.add('fa-exclamation-circle');
+                icon.style.color = '#ff3333';
+            } else {
+                icon.classList.remove('fa-exclamation-circle');
+                icon.classList.add('fa-check-circle');
+                icon.style.color = 'var(--accent-color)';
+            }
+            
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
     });
     </script>
 </body>
